@@ -32,23 +32,21 @@ def cozmo_drive_square(robot: cozmo.robot.Robot):
 
 def cozmo_program(robot: cozmo.robot.Robot):
     print('Hello World!')
-    n=1
-    while n != 0:
+    option=1
+    while option != 0:
         print ("1. Make Cozmo talk")
         print ("2. Move - straight:left:straight")
         print ("3. Make Cozmo count")
         print ("4. Move - small square")
         print (" ")
         print ("Ctrl-c to exit")
-        option = 5
+        option = input ("  ")
         result = {
             '1': cozmo_talk(robot),
             '2': cozmo_left_turn(robot),
             '3': cozmo_count(robot),
             '4': cozmo_drive_square(robot)
         } [option]
-        option = 5
-        type (result)
 
 
 cozmo.run_program(cozmo_program)
