@@ -9,33 +9,40 @@ import MultiColumnLB as mclb
 
 
 #Global Variables
-cozmoCommands = ('drive_straight', 'say_text', 'turn_in_place', 'four', 'five', 'six', 'seven', 'eight', 'nine', 'ten')
-driveStraightVars = ('distance','speed')
+cozmo_commands = ('drive_straight', 'say_text', 'turn_left', 'turn_right', 'count', 'drive_square', 'seven', 'eight', 'nine', 'ten')
+drive_straight_PV = {'distance_mm': 150, 'speed_mmps': 50 }
+turn_left_PV = {'degrees': 90, 'speed_mmps': 50 }
+turn_right_PV = {'degrees': -90, 'speed_mmps': 50 }
+
+drive_straight_values = (11, 23, 54)
+run_list = ('drive_straight', 'say_text')
+
 sayTextVars = ('string')
 turnInPlaceVars = ('degrees')
 
 
-
-
-
-
-
-def cozmo_talk(robot: cozmo.robot.Robot):
-    # First words Ryan :-)
-    robot.say_text("Hello Ryan").wait_for_completed()
-
+#Start Functions...
+def cozmo_drive_straight(robot: cozmo.robot.Robot):
+    # Move and take a left
+    robot.drive_straight(distance_mm(150), speed_mmps(50)).wait_for_completed()
 
 def cozmo_left_turn(robot: cozmo.robot.Robot):
     # Move and take a left
     robot.drive_straight(distance_mm(150), speed_mmps(50)).wait_for_completed()
     robot.turn_in_place(degrees(90)).wait_for_completed()
 
+def cozmo_right_turn(robot: cozmo.robot.Robot):
+    # Move and take a left
+    robot.turn_in_place(degrees(-90)).wait_for_completed()
 
 def cozmo_count(robot: cozmo.robot.Robot):
     # Voice Count to 3
     for i in range(3):
         robot.say_text(str(i + 1)).wait_for_completed()
 
+def cozmo_talk(robot: cozmo.robot.Robot):
+    # First words Ryan :-)
+    robot.say_text("Hello Ryan").wait_for_completed()
 
 def cozmo_drive_square(robot: cozmo.robot.Robot):
     # Make a small square
@@ -43,9 +50,25 @@ def cozmo_drive_square(robot: cozmo.robot.Robot):
         robot.drive_straight(distance_mm(150), speed_mmps(50)).wait_for_completed()
         robot.turn_in_place(degrees(90)).wait_for_completed()
 
-def on_select(data):
-        print("called command when row is selected")
-        print(data)
+def on_select(option):
+        print("Option", option)
+        if option == ['say_text']:
+            cozmo.run_program(cozmo_talk)
+            print("Talk Complete", option)
+        elif option == ['turn_left']:
+            cozmo.run_program(cozmo_left_turn)
+            print("Left Complete", option)
+        elif option == ['turn_right']:
+            cozmo.run_program(cozmo_right_turn)
+            print("Right Complete", option)
+        elif option == ['drive_straight']:
+            cozmo.run_program(cozmo_drive_straight)
+            print("Straight Complete", option)
+        elif option == ['drive_square']:
+            cozmo.run_program(cozmo_drive_square)
+            print("Square Complete", option)
+
+#        print(option)
         print("\n")
 
 
@@ -54,64 +77,70 @@ def show_info(msg):
 
 
 
-
 def main():
-    #Create mainwindow and frame.
+    #Create mainwindow and frames.
     root = Tk()
     root.title("Cozmo Controler")
-    root.geometry("800x300+200+200")
+    root.geometry("850x300+200+200")
 
-    # layout all of the main containers
- #   root.grid_rowconfigure(1, weight=1)
- #   root.grid_columnconfigure(0, weight=1)
-#    top_frame = ttk.Frame(root, width=450, height=50, pady=3)
-#    top_frame.grid(row=0)
-#    center = ttk.Frame(root, bg='gray2', width=250, height=40, padx=3, pady=3)
- #   center.grid(row=1, sticky="nsew")
+    topframe = ttk.Frame(root)#, padx=3, pady=3)
+    topframe.pack( side ="top", padx=5, pady=10)
 
-    mc = mclb.Multicolumn_Listbox(root, ["Cozmo Command", "Property", "Value"], stripped_rows=("#D4E6F1", "#A9CCE3"), command=on_select) #, cell_anchor="center")
-    mc.interior.pack( side = "left" )
+    bottomframe = ttk.Frame(root)#, padx=3, pady=3)
+    bottomframe.pack( side ="bottom", padx=5, pady=10)
 
-#Initialize table
-    mc.clear()
-    for i in range(len(cozmoCommands)):
-        mc.insert_row([" ", " ", " "])
-    mc.column[0] = cozmoCommands
+    #Add widgets to the correct frames()
+
+    addBT = ttk.Button(topframe, text="Add to Run List")
+    addBT.pack( side = "left", padx=5, pady=10 )
+
+    runBT = ttk.Button(topframe, text="Run the List")
+    runBT.pack( side = "left", padx=5, pady=10 )
+
+    deleteBT = ttk.Button(topframe, text="Delete from Run List" )
+    deleteBT.pack( side = "left", padx=5, pady=10 )
+
+    quitBT = ttk.Button(topframe, text="Quit", command=exit)
+    quitBT.pack( side = "right", padx=200, pady=10 )
+
+    commandLB = mclb.Multicolumn_Listbox(bottomframe, ["Cozmo Command"], stripped_rows=("#D4E6F1", "#A9CCE3"), command=on_select, )
+    commandLB.interior.pack( side="left", padx=5, pady=10)
+
+    propatribLB = mclb.Multicolumn_Listbox(bottomframe, ["Property", "Value"], stripped_rows=("#D4E6F1", "#A9CCE3"), command=on_select)
+    propatribLB.interior.pack( side = "left", padx=5, pady=10 )
+
+    runcommandLB = mclb.Multicolumn_Listbox(bottomframe, ["Run List"], stripped_rows=("#D4E6F1", "#A9CCE3"), command=on_select)
+    runcommandLB.interior.pack( side = "left", padx=5, pady=10 )
+
+
+# Initialize Cozmo Command list
+    commandLB.clear()
+    for i in range(len(cozmo_commands)):
+        commandLB.insert_row([" "])
+        commandLB.column[0] = cozmo_commands
+    commandLB.select_row(0)
+
+
+# Initialize Property and Attribute list
+    propatribLB.clear()
+    prop_string = list(drive_straight_PV.keys())
+    value_string = list(drive_straight_PV.values())
+    for i in range(len(prop_string)):
+        propatribLB.insert_row([" ", " "])
+        propatribLB.column[0] = prop_string
+        propatribLB.column[1] = value_string
+    propatribLB.select_row(0)
+
+
+# Initialize Run Command list
+    runcommandLB.clear()
+    for i in range(len(run_list)):
+        runcommandLB.insert_row([" "])
+        runcommandLB.column[0] = run_list
 
     root.mainloop()
 
-    '''    
-        mainframe = ttk.Frame(root, padding=(5, 5, 12, 12))
-        mainframe.grid(column=0, row=0, sticky=(N, W, E, S))
-        mainframe.columnconfigure(0, weight=1)
-        mainframe.rowconfigure(0, weight=1)
-    
-    
-    
-    
-        lbox = Listbox(mainframe, height=5)
-    
-    
-    
-        lbox.grid(column=0, row=1, rowspan=8, sticky=(N, S, E, W))
-        for i in range(len(cozmoConSum)):
-            lbox.insert(END, cozmoConSum[i])
-            if i % 2 == 0:
-                lbox.itemconfigure(i, background='#f0f0ff')
-    
-        ttk.Button(mainframe, text="Cozmo Talks").grid(column=3, row=1, sticky=W)
-        ttk.Button(mainframe, text="Cozmo Moves").grid(column=3, row=2, sticky=W)
-        ttk.Button(mainframe, text="Cozmo Counts").grid(column=3, row=3, sticky=W)
-        ttk.Button(mainframe, text="Cozmo Square Dancing").grid(column=3, row=4, sticky=W)
-        ttk.Button(mainframe, text="Quit", command=exit).grid(column=4, row=6, sticky=W)
-    
-        for child in mainframe.winfo_children(): child.grid_configure(padx=5, pady=5)
-    
-    #    root.bind('<Return>', calculate)
-        root.mainloop()
-        
-   
-
+'''
 
     mc.insert_row([1, 2, 3])
     show_info("mc.insert_row([1,2,3])")
@@ -168,11 +197,11 @@ def main():
 
     row = mc.row[0].update([2, 4, 5])
     show_info("mc.row[0].update([2,4,5])")
- '''
 
 
 
-    '''
+
+
     option = 1
     while option != 0:
         print('Setting up result')
@@ -193,8 +222,6 @@ def main():
             elif option == 4:
                 cozmo.run_program(cozmo_drive_square)
     '''
-
-
 
 if __name__ == "__main__":
     main()
