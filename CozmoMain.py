@@ -67,8 +67,6 @@ def on_select(option):
         elif option == ['drive_square']:
             cozmo.run_program(cozmo_drive_square)
             print("Square Complete", option)
-
-#        print(option)
         print("\n")
 
 
@@ -140,88 +138,6 @@ def main():
 
     root.mainloop()
 
-'''
-
-    mc.insert_row([1, 2, 3])
-    show_info("mc.insert_row([1,2,3])")
-
-    mc.row.insert([4, 5, 7])
-    show_info("mc.row.insert([4,5,7])")
-
-    mc.update_row(0, [7, 8, 9])
-    show_info("mc.update_row(0, [4,5,6])")
-
-    mc.update([[1, 2, 3], [4, 5, 6]])
-    show_info("mc.update([[1,2,3], [4,5,6]])")
-
-    mc.select_row(0)
-    show_info("mc.select_row(0)")
-
-    print("mc.selected_rows")
-    print(mc.selected_rows)
-    print("\n")
-
-    print("mc.table_data")
-    print(mc.table_data)
-    print("\n")
-
-    print("mc.row[0]")
-    print(mc.row[0])
-    print("\n")
-
-    print("mc.row_data(0)")
-    print(mc.row_data(0))
-    print("\n")
-
-    print("mc.column[1]")
-    print(mc.column[1])
-    print("\n")
-
-    print("mc[0,1]")
-    print(mc[0, 1])
-    print("\n")
-
-    mc.column[1] = ["item1", "item2"]
-
-    mc.update_column(0, cozmoCommands )
-    show_info("mc.update_column(2, [8,9])")
-
-    mc.clear()
-    show_info("mc.clear()")
-
-    mc.table_data = [[1, 2, 3], [4, 5, 6], [7, 8, 9], [10, 11, 12], [13, 14, 15], [16, 17, 18], [19, 20, 21]]
-    show_info("mc.table_data = [[1,2,3], [4,5,6], [7,8,9], [10,11,12], [13,14,15], [16,17,18], [19,20,21]]")
-
-    mc.delete_row(1)
-    show_info("mc.delete_row(1)")
-
-    row = mc.row[0].update([2, 4, 5])
-    show_info("mc.row[0].update([2,4,5])")
-
-
-
-
-
-    option = 1
-    while option != 0:
-        print('Setting up result')
-        print("1. Make Cozmo talk")
-        print("2. Move - straight:left:straight")
-        print("3. Make Cozmo count")
-            print("4. Move - small square")
-            print(" ")
-            print("0. Exit")
-            option = int(input('Select a Number\n'))
-            print("Option", option)
-            if option == 1:
-                cozmo.run_program(cozmo_talk)
-            elif option == 2:
-                cozmo.run_program(cozmo_left_turn)
-            elif option == 3:
-                cozmo.run_program(cozmo_count)
-            elif option == 4:
-                cozmo.run_program(cozmo_drive_square)
-    '''
 
 if __name__ == "__main__":
     main()
