@@ -28,7 +28,6 @@ def cozmo_drive_straight(robot: cozmo.robot.Robot):
 
 def cozmo_left_turn(robot: cozmo.robot.Robot):
     # Move and take a left
-    robot.drive_straight(distance_mm(150), speed_mmps(50)).wait_for_completed()
     robot.turn_in_place(degrees(90)).wait_for_completed()
 
 def cozmo_right_turn(robot: cozmo.robot.Robot):
@@ -51,7 +50,7 @@ def cozmo_drive_square(robot: cozmo.robot.Robot):
         robot.turn_in_place(degrees(90)).wait_for_completed()
 
 def on_select(option):
-        print("Option", option)
+        print("Option:", option)
         if option == ['say_text']:
             cozmo.run_program(cozmo_talk)
             print("Talk Complete", option)
@@ -67,6 +66,9 @@ def on_select(option):
         elif option == ['drive_square']:
             cozmo.run_program(cozmo_drive_square)
             print("Square Complete", option)
+        elif option == ['count']:
+            cozmo.run_program(cozmo_count)
+            print("Count Complete", option)
         print("\n")
 
 
@@ -112,11 +114,12 @@ def main():
 
 
 # Initialize Cozmo Command list
+    print ("initializing Command List")
     commandLB.clear()
     for i in range(len(cozmo_commands)):
         commandLB.insert_row([" "])
         commandLB.column[0] = cozmo_commands
-    commandLB.select_row(0)
+    #commandLB.select_row(0)
 
 
 # Initialize Property and Attribute list
@@ -127,7 +130,7 @@ def main():
         propatribLB.insert_row([" ", " "])
         propatribLB.column[0] = prop_string
         propatribLB.column[1] = value_string
-    propatribLB.select_row(0)
+    #propatribLB.select_row(0)
 
 
 # Initialize Run Command list
