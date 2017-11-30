@@ -1,18 +1,22 @@
 #!/usr/bin/env python
-# Code samples for Ryan from Ray
+# Code samples in Python
 
 import cozmo
 from tkinter import Tk, ttk
 from tkinter import messagebox
 from cozmo.util import degrees, distance_mm, speed_mmps
 import MultiColumnLB as mclb
+#import CozmoGui as create_window
 
 
 #Global Variables
-cozmo_commands = ('drive_straight', 'say_text', 'turn_left', 'turn_right', 'count', 'drive_square', 'seven', 'eight', 'nine', 'ten')
+cozmo_commands = ('drive_straight', 'say_text', 'turn_left', 'turn_right', 'count', 'drive_square', )
 drive_straight_PV = {'distance_mm': 150, 'speed_mmps': 50 }
 turn_left_PV = {'degrees': 90, 'speed_mmps': 50 }
 turn_right_PV = {'degrees': -90, 'speed_mmps': 50 }
+say_text_PV = {'Hello, Ryan'}
+count_PV = {'1', '2', '3'}
+drive_square_PV = {'degrees': 90, 'speed_mmps': 50 }
 
 drive_straight_values = (11, 23, 54)
 run_list = ('drive_straight', 'say_text')
@@ -77,18 +81,15 @@ def show_info(msg):
 
 
 
-def main():
-    #Create mainwindow and frames.
-    root = Tk()
+def create_window(root):
+#    root = Tk()
     root.title("Cozmo Controler")
     root.geometry("850x300+200+200")
-
     topframe = ttk.Frame(root)#, padx=3, pady=3)
     topframe.pack( side ="top", padx=5, pady=10)
 
     bottomframe = ttk.Frame(root)#, padx=3, pady=3)
     bottomframe.pack( side ="bottom", padx=5, pady=10)
-
     #Add widgets to the correct frames()
 
     addBT = ttk.Button(topframe, text="Add to Run List")
@@ -103,7 +104,7 @@ def main():
     quitBT = ttk.Button(topframe, text="Quit", command=exit)
     quitBT.pack( side = "right", padx=200, pady=10 )
 
-    commandLB = mclb.Multicolumn_Listbox(bottomframe, ["Cozmo Command"], stripped_rows=("#D4E6F1", "#A9CCE3"), command=on_select, )
+    commandLB = mclb.Multicolumn_Listbox(bottomframe, ["Cozmo Command"], stripped_rows=("#D4E6F1", "#A9CCE3"), command=on_select )
     commandLB.interior.pack( side="left", padx=5, pady=10)
 
     propatribLB = mclb.Multicolumn_Listbox(bottomframe, ["Property", "Value"], stripped_rows=("#D4E6F1", "#A9CCE3"), command=on_select)
@@ -112,17 +113,13 @@ def main():
     runcommandLB = mclb.Multicolumn_Listbox(bottomframe, ["Run List"], stripped_rows=("#D4E6F1", "#A9CCE3"), command=on_select)
     runcommandLB.interior.pack( side = "left", padx=5, pady=10 )
 
-
-# Initialize Cozmo Command list
     print ("initializing Command List")
     commandLB.clear()
     for i in range(len(cozmo_commands)):
         commandLB.insert_row([" "])
         commandLB.column[0] = cozmo_commands
-    #commandLB.select_row(0)
 
-
-# Initialize Property and Attribute list
+    # Initialize Property and Attribute list
     propatribLB.clear()
     prop_string = list(drive_straight_PV.keys())
     value_string = list(drive_straight_PV.values())
@@ -130,16 +127,18 @@ def main():
         propatribLB.insert_row([" ", " "])
         propatribLB.column[0] = prop_string
         propatribLB.column[1] = value_string
-    #propatribLB.select_row(0)
 
-
-# Initialize Run Command list
     runcommandLB.clear()
     for i in range(len(run_list)):
         runcommandLB.insert_row([" "])
         runcommandLB.column[0] = run_list
 
     root.mainloop()
+
+def main():
+#    Create mainwindow and frames.
+    root = Tk()
+    create_window(root)
 
 
 if __name__ == "__main__":
